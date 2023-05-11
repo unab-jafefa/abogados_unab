@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## Dependencias
 
 Aquí se listan las dependencias utilizadas en este proyecto:
