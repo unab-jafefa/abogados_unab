@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { 
   View, 
   Text, 
@@ -47,6 +47,14 @@ const users = [
 
 function Buscar() {
   const [buscar, setbuscar] = useState('');
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/agendas/')
+      .then(response => response.json())
+      .then(data => setData(data.agendas))
+      .catch(error => console.error(error));
+  }, []);
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Image style={styles.logo} source={require('../img/logo.png')} />
@@ -61,9 +69,19 @@ function Buscar() {
         placeholder="Buscar"
         onChangeText={setbuscar}
         defaultValue={buscar}
+        
       />
           <Card.Divider />
-          {users.map((u, i) => {
+          {data.map(item => (
+          <Text 
+          key={item.id}
+          style={styles.user}>
+            {"Nombre del cliente: "}{item.nombreCliente}{"\n"}
+            {"Nombre del abogado: "}{item.nombreAbogado}{"\n"}
+            {"Fecha de la cita: "}{item.date}
+            </Text>
+          ))} 
+          {/* {users.map((u, i) => {
             return (
               <View key={i} style={styles.user}>
                 <Image
@@ -79,7 +97,7 @@ function Buscar() {
                 </Text>
               </View>
             );
-          })}
+          })} */}
         </Card>
         </Text>
       </ScrollView>
@@ -120,8 +138,8 @@ const styles = StyleSheet.create({
   },
   user: {
     flexDirection: 'row',
-    marginBottom: 30,
-    height: 35,
+    marginBottom: 10,
+    height: 60,
     marginTop:10
   },
   image: {
