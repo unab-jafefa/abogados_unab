@@ -1,6 +1,7 @@
 import React, { useState , useEffect} from 'react';
 import { 
-  View, 
+  View,
+  RefreshControl, 
   Text, 
   StyleSheet,
   Image,   
@@ -44,68 +45,71 @@ const users = [
     avatar:'https://images-na.ssl-images-amazon.com/images/M/MV5BMTgxMTc1MTYzM15BMl5BanBnXkFtZTgwNzI5NjMwOTE@._V1_UY256_CR16,0,172,256_AL_.jpg',
   },
   ];
-
-function Buscar() {
-  const [buscar, setbuscar] = useState('');
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    fetch('http://127.0.0.1:8000/agendas/')
-      .then(response => response.json())
-      .then(data => setData(data.agendas))
-      .catch(error => console.error(error));
-  }, []);
-
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Image style={styles.logo} source={require('../img/logo.png')} />
-      <Text style={styles.title}>Buscar Cita</Text>
-      <SafeAreaView style={styles.container}>
-      <ScrollView >
-        <Text style={styles.text}>
-        <Card wrapperStyle={styles.card}>
-        <Icon name="magnify" size={24} color="#666" style={{  position:'absolute',right:0 }} />
-        <TextInput
-        inlineImageLeft='magnify'
-        placeholder="Buscar"
-        onChangeText={setbuscar}
-        defaultValue={buscar}
-        
-      />
-          <Card.Divider />
-          {data.map(item => (
-          <Text 
-          key={item.id}
-          style={styles.user}>
-            {"Nombre del cliente: "}{item.nombreCliente}{"\n"}
-            {"Nombre del abogado: "}{item.nombreAbogado}{"\n"}
-            {"Fecha de la cita: "}{item.date}
-            </Text>
-          ))} 
-          {/* {users.map((u, i) => {
-            return (
-              <View key={i} style={styles.user}>
-                <Image
-                  style={styles.image}
-                  resizeMode="cover"
-                  source={{ uri: u.avatar }}
-                />
-                <Text
-               style={styles.user}
-                >
-                  <Text style={{fontWeight:'bold'}}>{'Cliente: '}</Text>{u.name}{'\n'}
-                  <Text style={{fontWeight:'bold'}}>{`Abogado: ` }</Text>{u.abogado}
-                </Text>
-              </View>
-            );
-          })} */}
-        </Card>
-        </Text>
-      </ScrollView>
-    </SafeAreaView>
-
-    </View>
-  );
-}
+  function Buscar() {
+    const [buscar, setbuscar] = useState('');
+    const [data, setData] = useState([]);
+    
+    useEffect(() => {
+      fetch('http://127.0.0.1:8000/agendas/')
+        .then(response => response.json())
+        .then(data => setData(data.agendas))
+        .catch(error => console.error(error));
+    }, []);
+  
+    const [refreshing, setRefreshing] = React.useState(false);
+  
+    const onRefresh = React.useCallback(() => {
+      setRefreshing(true);
+      fetch('http://127.0.0.1:8000/agendas/')
+        .then(response => response.json())
+        .then(data => {
+          setData(data.agendas);
+          setRefreshing(false);
+        })
+        .catch(error => {
+          console.error(error);
+          setRefreshing(false);
+        });
+    }, []);
+  
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Image style={styles.logo} source={require('../img/logo.png')} />
+        <Text style={styles.title}>Buscar Cita</Text>
+        <SafeAreaView style={styles.container}>
+        <ScrollView 
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+          <Text style={styles.text}>
+          <Card wrapperStyle={styles.card}>
+          <Icon name="magnify" size={24} color="#666" style={{  position:'absolute',right:0 }} />
+          <TextInput
+          inlineImageLeft='magnify'
+          placeholder="Buscar"
+          onChangeText={setbuscar}
+          defaultValue={buscar}
+          
+        />
+            <Card.Divider />
+            {data.map(item => (
+            <Text 
+            key={item.id}
+            style={styles.user}>
+              {"Nombre del cliente: "}{item.nombreCliente}{"\n"}
+              {"Nombre del abogado: "}{item.nombreAbogado}{"\n"}
+              {"Fecha de la cita: "}{item.date}
+              </Text>
+            ))} 
+          </Card>
+          </Text>
+        </ScrollView>
+      </SafeAreaView>
+  
+      </View>
+    );
+  }
+  
 const styles = StyleSheet.create({
   logo: {
     width: 80,
