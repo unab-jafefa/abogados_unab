@@ -6,10 +6,10 @@ import {
   Image,   
   SafeAreaView,
   ScrollView,
-  TextInput,} from 'react-native';
+  TextInput,
+  } from 'react-native';
 import {  Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 
 
 const users = [
@@ -71,9 +71,12 @@ function Buscar() {
                   resizeMode="cover"
                   source={{ uri: u.avatar }}
                 />
-                <Text style={styles.name}><Text style={{fontWeight:'bold'}}>{`Cliente: ` }
-                </Text>{u.name}</Text>
-                <Text style={styles.name}> <Text style={{fontWeight:'bold'}}>{`Abogado: ` }</Text> {u.abogado}</Text>
+                <Text
+               style={styles.user}
+                >
+                  <Text style={{fontWeight:'bold'}}>{'Cliente: '}</Text>{u.name}{'\n'}
+                  <Text style={{fontWeight:'bold'}}>{`Abogado: ` }</Text>{u.abogado}
+                </Text>
               </View>
             );
           })}
@@ -117,8 +120,8 @@ const styles = StyleSheet.create({
   },
   user: {
     flexDirection: 'row',
-    marginBottom: 20,
-    height: 30,
+    marginBottom: 30,
+    height: 35,
     marginTop:10
   },
   image: {
