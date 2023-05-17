@@ -96,9 +96,9 @@ const users = [
             <Text 
             key={item.id}
             style={styles.user}>
-              {"Nombre del cliente: "}{item.nombreCliente}{"\n"}
-              {"Nombre del abogado: "}{item.nombreAbogado}{"\n"}
-              {"Fecha de la cita: "}{item.date}
+              <Text style={{fontWeight:'bold'}}>{"Nombre del cliente: "}</Text>{item.nombreCliente}{"\n"}
+              <Text style={{fontWeight:'bold'}}>{"Nombre del abogado: "}</Text>{item.nombreAbogado}{"\n"}
+              <Text style={{fontWeight:'bold'}}>{"Fecha de la cita: "}</Text>{item.date}
               </Text>
             ))} 
           </Card>
