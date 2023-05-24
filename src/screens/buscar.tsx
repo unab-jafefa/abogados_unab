@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 80,
     height: 50,
-    marginTop: 50
+    marginTop: 80
   },
   card:{
     margin:20

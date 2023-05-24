@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {  StyleSheet, TextInput, Text, View, Pressable, Image,  } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 80,
     height: 50,
-    top: -100
+    top: -10
   },
   inputUnderLine: {
     backgroundColor: "white",
@@ -68,11 +68,44 @@ function Agendar({ navigation }) {
   const [nombreCliente, setName] = useState('')
   const [nombreAbogado, setAbogado] = useState('')
   const Abogados = ["Pablo Araya", "Gonzalo Huerta", "Sergio Guerra", "Javier Fernandez"]
-  console.log('abogado guardado ',nombreAbogado)
-
   const [date, setDate] = useState(new Date())
+  
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
 
+  const handleAgendarCita = () => {
+    const formData = {
+      id,
+      nombreCliente,
+      nombreAbogado,
+      date: formatDate(date), 
+    };
+    fetch('http://127.0.0.1:8000/agendas/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log(formData)
+          navigation.navigate('Home');
+        } else {
+
+          console.error('Error:', response.status);
+        }
+      })
+      .catch(error => {
+
+        console.error('Error:', error);
+      });
+  };
 
 
   return (
@@ -126,7 +159,7 @@ function Agendar({ navigation }) {
         </View>
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate('Home')}
+        onPress={handleAgendarCita }
       >
         <Text style={styles.text}>Agendar Cita</Text>
       </Pressable>
