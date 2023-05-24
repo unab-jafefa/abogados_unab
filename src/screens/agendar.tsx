@@ -77,6 +77,12 @@ function Agendar({ navigation }) {
     return `${year}-${month}-${day}`;
   };
 
+  const generateRandomID = () => {
+    const min = 100000;
+    const max = 999999;
+    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    return randomNumber.toString();
+  };
 
   const handleAgendarCita = () => {
     const formData = {
@@ -116,7 +122,7 @@ function Agendar({ navigation }) {
         style={styles.inputUnderLine}
         placeholder="Id de la cita"
         onChangeText={setId}
-        defaultValue={id}
+        defaultValue={generateRandomID()}
         maxLength={6}
         keyboardType="numeric"
       />
@@ -152,7 +158,8 @@ function Agendar({ navigation }) {
                 markHeight={40}
                 value={date}
                 height={150}
-                startYear={1982}
+                startYear={2018}
+                endYear={2030}
                 onChange={(value) => setDate(value)}
                 format="dd-mm-yyyy"
             />
