@@ -122,7 +122,7 @@ function Agendar({ navigation }) {
         style={styles.inputUnderLine}
         placeholder="Id de la cita"
         onChangeText={setId}
-        defaultValue={generateRandomID()}
+        defaultValue={id}
         maxLength={6}
         keyboardType="numeric"
       />
